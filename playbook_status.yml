@@ -1,0 +1,32 @@
+---
+- name: ethminer configuration
+  hosts: miners
+  gather_facts: false
+
+  tasks:
+    - name: get uptime
+      command: uptime
+      register: uptime
+    - name: get disk
+      shell: df -h | grep sda
+      register: disk
+    - name: get memory
+      shell: head -3 /proc/meminfo 
+      register: memory
+    - name: get proc
+      shell: ps -efww | grep ethminer
+      register: running_proc
+ 
+
+    - name: print uptime
+      debug:
+        var: uptime.stdout
+    - name: print disk
+      debug:
+        var: disk.stdout_lines
+    - name: print memory
+      debug:
+        var: memory.stdout_lines
+    - name: print proc
+      debug:
+        var: running_proc.stdout

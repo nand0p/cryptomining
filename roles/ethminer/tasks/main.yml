@@ -1,0 +1,107 @@
+---
+- name: Verify ethminer version installed
+  command: ethminer --version
+  register: existing_version
+  ignore_errors: yes
+
+- name: get epoch seconds
+  command: date +%s
+  register: date
+
+- name: install packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - openssh-server
+    - perl
+    - git
+    - cmake
+    - build-essential
+    - dkms
+    - mesa-common-dev
+    - screen
+    - htop
+    - curl
+    - policykit-1
+  become: yes
+ 
+- name: backup existing source if exists
+  command: mv -v ethminer ethminer.{{ date.stdout }}
+  ignore_errors: yes
+
+- name: clone githib
+  git:
+    repo: https://github.com/ethereum-mining/ethminer.git
+    dest: ethminer
+    version: "{{ ethminer_commit_hash }}"
+
+- name: update submodules
+  command: git submodule update --init --recursive
+  args:
+    chdir: ethminer
+
+- name: make build dir
+  file:
+    path: ethminer/build
+    state: directory
+    mode: 0755
+
+- name: stop ethminer if running
+  service:
+    name: mine
+    state: stopped
+  become: yes
+
+- name: configure ethminer
+  command: cmake .. -DETHASHCUDA=ON
+  args:
+    chdir: ethminer/build
+
+- name: build ethminer
+  command: cmake --build .
+  args:
+    chdir: ethminer/build
+
+- name: install ethminer
+  command: make install
+  args:
+    chdir: ethminer/build
+  become: yes
+  notify:
+    - restart mine
+
+- name: install systemd init script
+  template:
+    src: mine.service.j2
+    dest: /etc/systemd/system/mine.service
+  notify:
+    - reload systemd
+    - restart mine
+  become: yes
+
+- name: ensure ethminer running
+  service:
+    name: mine
+    enabled: yes
+  become: yes
+
+- name: test ethminer version
+  command: ethminer --version
+  register: new_version
+
+- name: test miners
+  command: ethminer --list-devices
+  register: miner_test
+
+- name: print ethminer old version
+  debug:
+    var: existing_version.stdout
+
+- name: print ethminer new version
+  debug:
+    var: new_version.stdout
+
+- name: print miner test
+  debug:
+    var: miner_test.stdout_lines

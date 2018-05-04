@@ -1,0 +1,16 @@
+---
+- name: restart ethminer
+  hosts: miners
+  gather_facts: false
+
+  tasks:
+    - name: restart miner
+      service:
+        name: mine
+        state: restarted
+      register: restart
+      become: yes
+
+    - name: print restart miner
+      debug:
+        var: restart.stdout

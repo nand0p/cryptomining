@@ -1,0 +1,7 @@
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
+
+- name: restart mine
+  become: yes
+  command: systemctl restart mine

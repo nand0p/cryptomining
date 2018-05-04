@@ -1,0 +1,25 @@
+---
+- name: ethminer update systemd
+  hosts: miners
+  gather_facts: false
+ 
+  tasks:
+    - name: install systemd init script
+      template:
+        src: mine.service.j2
+        dest: /etc/systemd/system/mine.service
+      notify:
+        - reload systemd
+        - restart mine
+      become: yes
+
+  handlers:
+    - name: reload systemd
+      become: yes
+      command: systemctl daemon-reload
+
+    - name: restart mine
+      become: yes
+      command: systemctl restart mine
+
+
