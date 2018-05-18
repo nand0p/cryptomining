@@ -1,11 +1,11 @@
 ---
 - name: ethminer add key
-  hosts: miners
-  gather_facts: false
+  hosts: "{{ miner | default('miners') }}"
+  gather_facts: true
 
   tasks:
     - name: add ssh auth key
       authorized_key:
         user: "{{ ansible_env.USER }}"
         state: present
-        key: "{{ lookup('env', 'SSH_AUTH_KEY') }}
+        key: "{{ lookup('env', 'SSH_AUTH_KEY') }}"

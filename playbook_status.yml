@@ -1,6 +1,6 @@
 ---
 - name: ethminer configuration
-  hosts: miners
+  hosts: "{{ miner | default('miners') }}"
   gather_facts: false
 
   tasks:
