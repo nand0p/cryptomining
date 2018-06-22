@@ -1,11 +1,12 @@
 ---
 - name: ethminer configuration
   hosts: "{{ miner | default('miners') }}"
-  gather_facts: false
+  gather_facts: true
   serial: 1
 
-  # d190f23 0.14.0rc9
-  # e56090c 0.15.0.dev7
-  # 0ee866f 0.13.0
+  # v0.13.0
+  # v0.14.0
+  # v0.15.0rc2
+
   roles:
-  - { role: ethminer, ethminer_commit_hash: d190f23 }
+  - { role: ethminer, ethminer_release: "{{ version | default('v0.14.0') }}" }

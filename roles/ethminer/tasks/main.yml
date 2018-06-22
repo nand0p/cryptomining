@@ -30,11 +30,11 @@
   command: mv -v ethminer ethminer.{{ date.stdout }}
   ignore_errors: yes
 
-- name: clone githib
+- name: clone github
   git:
     repo: https://github.com/ethereum-mining/ethminer.git
     dest: ethminer
-    version: "{{ ethminer_commit_hash }}"
+    version: "{{ ethminer_release }}"
 
 - name: update submodules
   command: git submodule update --init --recursive

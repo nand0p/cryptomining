@@ -1,0 +1,49 @@
+---
+- name: install cuda
+  hosts: "{{ miner | default('miners') }}"
+  gather_facts: false
+
+  set_facts:
+    cuda_version: "{{ version | default('9_2') }}"
+
+    cuda_version_9_0: '9.0.176'
+    cuda_version_9_0_full: '{{ cuda_version_9_0 }}_384.81'
+    cuda_version_9_0_url:
+      - https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_{{ cuda_version_9_0_full }}_linux-run
+      - https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/1/cuda_{{ cuda_version_9_0 }}.1_linux-run
+      - https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/2/cuda_{{ cuda_version_9_0 }}.2_linux-run
+      - https://developer.nvidia.com/compute/cuda/9.0/Prod/patches/3/cuda_{{ cuda_version_9_0 }}.3_linux-run
+
+    cuda_version_9_1: '9.1.85'
+    cuda_version_9_1_full: '{{ cuda_version_9_1 }}_387.26'
+    cuda_version_9_1_url:
+      - https://developer.nvidia.com/compute/cuda/9.1/Prod/local_installers/cuda_{{ cuda_version_9_1_full }}_linux
+      - https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/1/cuda_{{ cuda_version_9_1 }}.1_linux
+      - https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/2/cuda_{{ cuda_version_9_1 }}.2_linux
+      - https://developer.nvidia.com/compute/cuda/9.1/Prod/patches/3/cuda_{{ cuda_version_9_1 }}.3_linux
+
+    cuda_version_9_2: '9.2_88'
+    cuda_version_9_2_full: '{{ cuda_version_9_2 }}_396.26'
+    cuda_version_9_2_url:
+      - https://developer.nvidia.com/compute/cuda/9.2/Prod/local_installers/cuda_{{ cuda_version_9_2_full }}_linux
+      - https://developer.nvidia.com/compute/cuda/9.2/Prod/patches/1/{{ cuda_version_9_2 }}.1_linux
+
+
+  tasks:
+    - name: get cuda
+      get_url:
+        url: {{ item }}
+      with_items: cuda_version_{{ cuda_version }}_url
+      register: cuda_download
+
+    - debug:
+        var: cuda_download
+
+    - name: install cuda 
+      command: echo install cuda
+      #command: "./{{ item | cut -f-1 -d'/' }}"
+      with_items: cuda_version_{{ cuda_version }}_url
+      register: cuda_install
+
+    - debug:
+        var: cuda_install
