@@ -4,6 +4,14 @@
   gather_facts: true
  
   tasks:
+    - name: print wallet
+      debug:
+        var: lookup('env', 'ETHER_WALLET')
+
+    - name: print email
+      debug:
+        var: lookup('env', 'ETHER_MINE_EMAIL')
+
     - name: install systemd init script
       template:
         src: mine.service.j2
@@ -12,6 +20,7 @@
         - reload systemd
         - restart mine
       become: yes
+      when: lookup('env', 'ETHER_WALLET') is defined and lookup('env', 'ETHER_MINE_EMAIL') is defined
 
   handlers:
     - name: reload systemd
