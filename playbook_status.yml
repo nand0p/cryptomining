@@ -8,7 +8,7 @@
       command: uptime
       register: uptime
     - name: get disk
-      shell: df -h | grep sda
+      shell: df -h
       register: disk
     - name: get memory
       shell: head -3 /proc/meminfo 
@@ -17,7 +17,6 @@
       shell: ps -efww | grep ethminer
       register: running_proc
  
-
     - name: print uptime
       debug:
         var: uptime.stdout

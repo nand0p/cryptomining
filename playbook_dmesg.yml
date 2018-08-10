@@ -1,0 +1,13 @@
+---
+- name: ethminer configuration
+  hosts: "{{ miner | default('miners') }}"
+  gather_facts: false
+
+  tasks:
+    - name: get dmesg
+      shell: dmesg
+      register: dmesg
+ 
+    - name: print dmesg
+      debug:
+        var: dmesg.stdout_lines
