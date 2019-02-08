@@ -52,6 +52,7 @@
     name: mine
     state: stopped
   become: yes
+  ignore_errors: true
 
 - name: configure ethminer
   command: cmake .. -DETHASHCUDA=ON
@@ -90,9 +91,10 @@
   command: ethminer --version
   register: new_version
 
-- name: test miners
-  command: ethminer --list-devices
-  register: miner_test
+# NOTE: not avail in latest version
+#- name: test miners
+#  command: ethminer --list-devices
+#  register: miner_test
 
 - name: print ethminer old version
   debug:

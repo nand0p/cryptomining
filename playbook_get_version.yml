@@ -10,9 +10,9 @@
     - name: get system_build
       command: uname -a
       register: system_build
-    - name: get grub boot
-      command: grep GRUB_CMDLINE_LINUX_DEFAULT /etc/default/grub
-      register: grub_boot
+    #- name: get grub boot
+    #  command: grep GRUB_CMDLINE_LINUX_DEFAULT /etc/default/grub
+    #  register: grub_boot
     - name: get cpu procs
       command: grep name /proc/cpuinfo
       register: cpu_procs
@@ -20,13 +20,13 @@
 
     - name: print ethminer version
       debug:
-        var: ethminer_version.stdout
+        var: ethminer_version.stderr
     - name: print system build
       debug:
         var: system_build.stdout
-    - name: print grub boot
-      debug:
-        var: grub_boot.stdout_lines
+    #- name: print grub boot
+    #  debug:
+    #    var: grub_boot.stdout_lines
     - name: print cpu procs
       debug:
         var: cpu_procs.stdout_lines

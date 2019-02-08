@@ -1,0 +1,32 @@
+---
+- name: ethminer update systemd
+  hosts: "{{ miner | default('miners') }}"
+  gather_facts: true
+ 
+  tasks:
+    - name: print wallet
+      debug:
+        var: lookup('env', 'ETHER_WALLET')
+
+    - name: print email
+      debug:
+        var: lookup('env', 'ETHER_MINE_EMAIL')
+
+    - name: install systemd init script
+      template:
+        src: mine.service.v2.j2
+        dest: /etc/systemd/system/mine.service
+      notify:
+        - reload systemd
+        - restart mine
+      become: yes
+      when: lookup('env', 'ETHER_WALLET') is defined and lookup('env', 'ETHER_MINE_EMAIL') is defined
+
+  handlers:
+    - name: reload systemd
+      become: yes
+      command: systemctl daemon-reload
+
+    - name: restart mine
+      become: yes
+      command: systemctl restart mine

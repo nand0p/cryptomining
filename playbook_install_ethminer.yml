@@ -7,6 +7,8 @@
   # v0.13.0
   # v0.14.0
   # v0.15.0rc2
+  # v0.16.1
+  # v0.17.0
 
   roles:
-  - { role: ethminer, ethminer_release: "{{ version | default('v0.14.0') }}" }
+  - { role: ethminer, ethminer_release: "{{ version | default('v0.17.0') }}" }
