@@ -52,6 +52,7 @@
     name: mine
     state: stopped
   become: yes
+  ignore_errors: true
 
 - name: configure ethminer
   command: cmake .. -DETHASHCUDA=ON
