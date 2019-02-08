@@ -8,7 +8,10 @@
   # v0.14.0
   # v0.15.0rc2
   # v0.16.1
+<<<<<<< HEAD
   # v0.17.0
+=======
+>>>>>>> 90159b48586348d78f3a2fb474b09c7da8ae3db5
 
   roles:
   - { role: ethminer, ethminer_release: "{{ version | default('v0.17.0') }}" }

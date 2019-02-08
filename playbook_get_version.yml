@@ -18,9 +18,12 @@
       register: cpu_procs
 
 
+<<<<<<< HEAD
     - name: print ethminer version
       debug:
         var: ethminer_version.stderr
+=======
+>>>>>>> 90159b48586348d78f3a2fb474b09c7da8ae3db5
     - name: print system build
       debug:
         var: system_build.stdout
@@ -30,3 +33,6 @@
     - name: print cpu procs
       debug:
         var: cpu_procs.stdout_lines
+    - name: print ethminer version
+      debug:
+        var: ethminer_version.stderr

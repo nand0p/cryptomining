@@ -32,8 +32,7 @@
   tasks:
     - name: get cuda
       get_url:
-        url: {{ item }}
-      with_items: cuda_version_{{ cuda_version }}_url
+        url: cuda_version_{{ cuda_version }}_url
       register: cuda_download
 
     - debug:
@@ -42,7 +41,7 @@
     - name: install cuda 
       command: echo install cuda
       #command: "./{{ item | cut -f-1 -d'/' }}"
-      with_items: cuda_version_{{ cuda_version }}_url
+      #with_items: cuda_version_{{ cuda_version }}_url
       register: cuda_install
 
     - debug:
