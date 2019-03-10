@@ -16,6 +16,9 @@
     - name: get proc
       shell: ps -efww | grep ethminer
       register: running_proc
+    - name: get power
+      shell: nvidia-smi -q -d POWER
+      register: power
  
     - name: print uptime
       debug:
@@ -29,3 +32,6 @@
     - name: print proc
       debug:
         var: running_proc.stdout
+    - name: power
+      debug:
+        var: power.stdout_lines

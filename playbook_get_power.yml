@@ -1,0 +1,13 @@
+---
+- name: ethminer configuration
+  hosts: "{{ miner | default('miners') }}"
+  gather_facts: false
+
+  tasks:
+    - name: get power
+      shell: nvidia-smi -q -d POWER
+      register: power
+ 
+    - name: power
+      debug:
+        var: power.stdout_lines
