@@ -1,6 +1,5 @@
 ---
-- name: install cuda
-  hosts: "{{ miner | default('miners') }}"
+- hosts: "{{ miner | default('miners') }}"
   gather_facts: false
 
 
