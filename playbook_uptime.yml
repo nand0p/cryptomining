@@ -1,0 +1,13 @@
+---
+- name: ethminer configuration
+  hosts: "{{ miner | default('miners') }}"
+  gather_facts: false
+
+  tasks:
+    - name: get uptime
+      command: uptime
+      register: uptime
+ 
+    - name: print uptime
+      debug:
+        var: uptime.stdout
