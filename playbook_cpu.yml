@@ -1,0 +1,13 @@
+---
+- name: ethminer configuration
+  hosts: "{{ miner | default('miners') }}"
+  gather_facts: false
+
+  tasks:
+    - name: get cpu
+      register: cpu
+      shell: cat /proc/cpuinfo | grep "model name"
+ 
+    - name: print cpu
+      debug:
+        var: cpu.stdout_lines
