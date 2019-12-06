@@ -18,23 +18,25 @@
       debug:
         var: email
 
+    - name: exit if unset vars
+      fail:
+        msg: miner wallet and email must be exported to environment
+      when: (wallet | length == 0) and (email | length == 0)
+
     - name: install systemd init script
       template:
-        src: mine.service.v2.j2
+        src: mine.service.v3.j2
         dest: /etc/systemd/system/mine.service
       notify:
         - reload systemd
         - restart mine
       become: yes
-      when: (wallet | length > 0) and (email | length > 0)
 
   handlers:
     - name: reload systemd
       become: yes
       command: systemctl daemon-reload
-      when: (wallet | length > 0) and (email | length > 0)
 
     - name: restart mine
       become: yes
       command: systemctl restart mine
-      when: (wallet | length > 0) and (email | length > 0)

@@ -2,12 +2,23 @@
 - hosts: "{{ miner | default('miners') }}"
   gather_facts: false
 
-
   tasks:
+    - name: set cuda version
+      set_fact:
+        cuda_version: "10.2"
+        cuda_version_full: "10.2.89_440.33.01"
+        #cuda_version_full: "10.1.105_418.39"
+
+    - name: stop ethminer service
+      service:
+        name: mine
+        state: stopped
+      become: true
+
     - name: get cuda
       get_url:
-        url: https://developer.nvidia.com/compute/cuda/10.1/Prod/local_installers/cuda_10.1.105_418.39_linux.run
-        dest: "{{ lookup('env', 'HOME') }}/cuda_10.1.105_418.39_linux.run"
+        url: "https://developer.download.nvidia.com/compute/cuda/{{ cuda_version }}/Prod/local_installers/cuda_{{ cuda_version_full }}_linux.run"
+        dest: "{{ lookup('env', 'HOME') }}/cuda_{{ cuda_version_full }}_linux.run"
         mode: 0755
       register: cuda_download
 
@@ -16,7 +27,7 @@
 
     - name: install cuda 
       become: yes
-      command: "{{ lookup('env', 'HOME') }}/cuda_10.1.105_418.39_linux.run --silent --driver --toolkit"
+      command: "{{ lookup('env', 'HOME') }}/cuda_{{ cuda_version_full }}_linux.run --silent --driver --toolkit"
       register: cuda_install
 
     - debug:

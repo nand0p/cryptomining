@@ -1,0 +1,31 @@
+[Unit]
+Description=Mine Ether
+After=network.target
+
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/local/bin/ethminer \
+  --farm-recheck ${FARM_RECHECK} \
+  --report-hr \
+  --${TOOLKIT} \
+  --api-port ${API_PORT} \
+  -P stratum://${WALLET}@${POOL}:${STRATUM_PORT}/${RIG}/${NOTIFY}
+StandardOutput=journal
+StandardError=journal
+User={{ ansible_env.USER }}
+Environment=RIG={{ inventory_hostname }}
+Environment=WALLET={{ lookup('env', 'ETHER_WALLET') }}
+Environment=NOTIFY={{ lookup('env', 'ETHER_MINE_EMAIL') }}
+Environment=POOL=eth-us-east1.nanopool.org
+Environment=POOL_FAILOVER=eth-us-west1.nanopool.org
+Environment=STRATUM_PORT=9999
+Environment=API_PORT=-3333
+Environment=FARM_RECHECK=1000
+Environment=TOOLKIT=cuda
+#Environment=TOOLKIT=opencl
+
+
+[Install]
+WantedBy=multi-user.target

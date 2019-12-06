@@ -1,4 +1,23 @@
 ---
+
+- name: set miner vars
+  set_fact:
+    wallet: "{{ lookup('env', 'ETHER_WALLET') }}"
+    email: "{{ lookup('env', 'ETHER_MINE_EMAIL') }}"
+
+- name: print wallet
+  debug:
+    var: wallet
+
+- name: print email
+  debug:
+    var: email
+
+- name: exit if unset vars
+  fail:
+    msg: miner wallet and email must be exported to environment
+  when: (wallet | length == 0) and (email | length == 0)
+
 - name: Verify ethminer version installed
   command: ethminer --version
   register: existing_version
@@ -10,20 +29,21 @@
 
 - name: install packages
   apt:
-    name: "{{ item }}"
+    name:
+      - openssh-server
+      - perl
+      - git
+      - cmake
+      - build-essential
+      - dkms
+      - mesa-common-dev
+      - screen
+      - htop
+      - curl
+      - policykit-1
+      - lm-sensors
+      - hddtemp
     state: present
-  with_items:
-    - openssh-server
-    - perl
-    - git
-    - cmake
-    - build-essential
-    - dkms
-    - mesa-common-dev
-    - screen
-    - htop
-    - curl
-    - policykit-1
   become: yes
  
 - name: backup existing source if exists
