@@ -4,8 +4,17 @@
   gather_facts: true
 
   tasks:
+    - name: set pubkey var
+      set_fact:
+        ssh_key: "{{ lookup('env', 'SSH_AUTH_KEY') }}"
+
+    - name: exit if unset vars
+      fail:
+        msg: miner wallet and email must be exported to environment
+      when: ssh_key | length == 0
+
     - name: add ssh auth key
       authorized_key:
         user: "{{ ansible_env.USER }}"
         state: present
-        key: "{{ lookup('env', 'SSH_AUTH_KEY') }}"
+        key: "{{ ssh_key }}"
