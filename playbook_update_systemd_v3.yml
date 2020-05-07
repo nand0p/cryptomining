@@ -21,7 +21,7 @@
     - name: exit if unset vars
       fail:
         msg: miner wallet and email must be exported to environment
-      when: (wallet | length == 0) and (email | length == 0)
+      when: (wallet | length == 0) or (email | length == 0)
 
     - name: install systemd init script
       template:
