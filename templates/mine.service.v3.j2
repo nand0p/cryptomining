@@ -18,6 +18,7 @@ User={{ ansible_env.USER }}
 Environment=RIG={{ inventory_hostname }}
 Environment=WALLET={{ lookup('env', 'ETHER_WALLET') }}
 Environment=NOTIFY={{ lookup('env', 'ETHER_MINE_EMAIL') }}
+# NOTIFY = user %% domain
 Environment=POOL=eth-us-east1.nanopool.org
 Environment=POOL_FAILOVER=eth-us-west1.nanopool.org
 Environment=STRATUM_PORT=9999
