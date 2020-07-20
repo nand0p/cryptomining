@@ -111,10 +111,9 @@
   command: ethminer --version
   register: new_version
 
-# NOTE: not avail in latest version
-#- name: test miners
-#  command: ethminer --list-devices
-#  register: miner_test
+- name: test miners
+  command: ethminer --list-devices
+  register: miner_test
 
 - name: print ethminer old version
   debug:
