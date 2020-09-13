@@ -5,12 +5,17 @@
   tasks:
     - name: set cuda version
       set_fact:
-        cuda_version: "10.2"
-        cuda_version_full: "10.2.89_440.33.01"
+        #cuda_version: "10.2"
+        #cuda_version_full: "10.2.89_440.33.01"
 
+        #cuda_version: "10.1"
         #cuda_version_full: "10.1.105_418.39"
+
         #cuda_version: "11.0.2"
         #cuda_version_full: "11.0.2_450.51.05"
+
+        cuda_version: "11.0.3"
+        cuda_version_full: "11.0.3_450.51.06"
 
     - name: stop ethminer service
       service:
@@ -29,10 +34,10 @@
     - name: get cuda
       get_url:
         # v10
-        url: "https://developer.download.nvidia.com/compute/cuda/{{ cuda_version }}/Prod/local_installers/cuda_{{ cuda_version_full }}_linux.run"
+        #url: "https://developer.download.nvidia.com/compute/cuda/{{ cuda_version }}/Prod/local_installers/cuda_{{ cuda_version_full }}_linux.run"
 
         # v11
-        #url: "https://developer.download.nvidia.com/compute/cuda/{{ cuda_version }}/local_installers/cuda_{{ cuda_version_full }}_linux.run"
+        url: "https://developer.download.nvidia.com/compute/cuda/{{ cuda_version }}/local_installers/cuda_{{ cuda_version_full }}_linux.run"
 
         dest: "{{ lookup('env', 'HOME') }}/cuda_{{ cuda_version_full }}_linux.run"
         mode: 0755
@@ -44,6 +49,7 @@
     - name: install cuda 
       become: yes
       #command: "{{ lookup('env', 'HOME') }}/cuda_{{ cuda_version_full }}_linux.run --silent --driver --toolkit --override-driver-check"
+      #command: "{{ lookup('env', 'HOME') }}/cuda_{{ cuda_version_full }}_linux.run --silent --toolkit --override"
       command: "{{ lookup('env', 'HOME') }}/cuda_{{ cuda_version_full }}_linux.run --silent --driver --toolkit"
       register: cuda_install
 

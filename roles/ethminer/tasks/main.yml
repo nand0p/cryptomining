@@ -79,6 +79,12 @@
   args:
     chdir: ethminer/build
 
+- name: fix for cuda 11 compute 30 gpu arch
+  lineinfile:
+    path: ethminer/libethash-cuda/CMakeLists.txt
+    regexp: '.*compute_30.*'
+    state: absent
+
 - name: build ethminer
   command: cmake --build .
   args:
